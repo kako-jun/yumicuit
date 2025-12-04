@@ -1,0 +1,31 @@
+.container {
+  position: fixed;
+  bottom: var(--spacing-lg);
+  right: var(--spacing-lg);
+  display: flex;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.button {
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-small);
+  font-family: var(--font-family);
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.button:hover {
+  color: var(--color-text-primary);
+}
+
+.button.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-primary);
+}
