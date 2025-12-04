@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">yumicuit</string>
+    <string name="title_activity_main">yumicuit</string>
+    <string name="package_name">com.llll.yumicuit</string>
+    <string name="custom_url_scheme">com.llll.yumicuit</string>
+</resources>

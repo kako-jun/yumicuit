@@ -40,7 +40,7 @@ async function chatWithOllama(prompt: string): Promise<string> {
 
 // Gemini無料版でチャット（API keyなしで使える方法がないため、フォールバック用）
 // 現状はプレースホルダー。将来的にはGroq無料枠やCloudflare Workers AIを検討
-async function chatWithFreeOnline(prompt: string): Promise<string> {
+async function chatWithFreeOnline(_prompt: string): Promise<string> {
   // TODO: 無料のオンラインLLM APIを実装
   // 現状はローカルLLMが必須
   throw new Error('オンラインLLMは準備中です。ローカルでOllamaを起動してください。')
