@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useEffect, forwardRef } from 'react'
 import styles from './DreamInput.module.css'
 
 interface DreamInputProps {
@@ -6,33 +6,35 @@ interface DreamInputProps {
   onChange: (value: string) => void
 }
 
-export function DreamInput({ value, onChange }: DreamInputProps) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+export const DreamInput = forwardRef<HTMLTextAreaElement, DreamInputProps>(
+  function DreamInput({ value, onChange }, ref) {
+    useEffect(() => {
+      // Auto-focus on mount
+      if (ref && 'current' in ref && ref.current) {
+        ref.current.focus()
+      }
+    }, [ref])
 
-  useEffect(() => {
-    // Auto-focus on mount
-    textareaRef.current?.focus()
-  }, [])
+    useEffect(() => {
+      // Auto-resize textarea
+      if (ref && 'current' in ref && ref.current) {
+        const textarea = ref.current
+        textarea.style.height = 'auto'
+        textarea.style.height = `${textarea.scrollHeight}px`
+      }
+    }, [value, ref])
 
-  useEffect(() => {
-    // Auto-resize textarea
-    const textarea = textareaRef.current
-    if (textarea) {
-      textarea.style.height = 'auto'
-      textarea.style.height = `${textarea.scrollHeight}px`
-    }
-  }, [value])
-
-  return (
-    <textarea
-      ref={textareaRef}
-      className={styles.input}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      autoCapitalize="off"
-      autoComplete="off"
-      autoCorrect="off"
-      spellCheck={false}
-    />
-  )
-}
+    return (
+      <textarea
+        ref={ref}
+        className={styles.input}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        autoCapitalize="off"
+        autoComplete="off"
+        autoCorrect="off"
+        spellCheck={false}
+      />
+    )
+  }
+)
