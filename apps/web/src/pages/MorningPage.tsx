@@ -14,6 +14,7 @@ export function MorningPage() {
   const [showQuestionnaire, setShowQuestionnaire] = useState(false)
   const [pendingDream, setPendingDream] = useState<DreamRecord | null>(null)
   const [analyzing, setAnalyzing] = useState(false)
+  const [questionnaireAnswers, setQuestionnaireAnswers] = useState<Record<string, string[]>>({})
   const inputRef = useRef<HTMLTextAreaElement>(null)
 
   const handleSaved = useCallback(() => {
@@ -47,6 +48,9 @@ export function MorningPage() {
   }, [])
 
   const handleQuestionnaireComplete = useCallback(async (answers: Record<string, string[]>) => {
+    // 回答を保持
+    setQuestionnaireAnswers(answers)
+
     // 自由入力とアンケート回答を合わせてトークン化
     const tokens: string[] = []
 
@@ -140,6 +144,7 @@ export function MorningPage() {
       <DreamQuestionnaire
         onComplete={handleQuestionnaireComplete}
         onCancel={() => setShowQuestionnaire(false)}
+        initialAnswers={questionnaireAnswers}
       />
     )
   }
@@ -157,13 +162,13 @@ export function MorningPage() {
           position: 'fixed',
           bottom: 'var(--spacing-lg)',
           left: 'var(--spacing-lg)',
-          background: 'rgba(255, 255, 255, 0.1)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
-          borderRadius: '8px',
+          background: 'transparent',
+          border: 'none',
           color: 'var(--color-text-muted)',
-          padding: '10px 16px',
+          padding: '4px 8px',
           fontSize: '14px',
           cursor: 'pointer',
+          opacity: 0.4,
         }}
       >
         質問形式で入力

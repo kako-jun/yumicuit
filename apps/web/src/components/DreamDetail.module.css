@@ -144,24 +144,22 @@
 }
 
 .analyzeButton {
-  width: 100%;
-  background: linear-gradient(135deg, rgba(100, 80, 180, 0.4), rgba(60, 100, 180, 0.4));
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.9);
-  padding: 14px 20px;
-  border-radius: 12px;
-  font-size: 15px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 8px 16px;
+  font-size: 14px;
+  font-family: var(--font-family);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .analyzeButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, rgba(100, 80, 180, 0.6), rgba(60, 100, 180, 0.6));
-  border-color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .analyzeButton:disabled {
-  opacity: 0.5;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
@@ -286,36 +284,23 @@
 
 .uploadButton,
 .generateButton {
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px;
+  background: transparent;
+  border: none;
+  padding: 8px 12px;
   font-size: 13px;
+  font-family: var(--font-family);
   cursor: pointer;
   transition: all 0.2s;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.uploadButton {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+.uploadButton:hover,
+.generateButton:hover:not(:disabled) {
   color: rgba(255, 255, 255, 0.8);
 }
 
-.uploadButton:hover {
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.generateButton {
-  background: linear-gradient(135deg, rgba(100, 80, 180, 0.3), rgba(60, 100, 180, 0.3));
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.generateButton:hover:not(:disabled) {
-  background: linear-gradient(135deg, rgba(100, 80, 180, 0.5), rgba(60, 100, 180, 0.5));
-}
-
 .generateButton:disabled {
-  opacity: 0.5;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 

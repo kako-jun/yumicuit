@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import styles from './DreamQuestionnaire.module.css'
 
 interface Question {
@@ -38,64 +38,65 @@ const QUESTIONS: Question[] = [
 interface DreamQuestionnaireProps {
   onComplete: (answers: Record<string, string[]>) => void
   onCancel: () => void
+  initialAnswers?: Record<string, string[]>
 }
 
-export function DreamQuestionnaire({ onComplete, onCancel }: DreamQuestionnaireProps) {
+export function DreamQuestionnaire({ onComplete, onCancel, initialAnswers = {} }: DreamQuestionnaireProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [answers, setAnswers] = useState<Record<string, string[]>>({})
-  const [customInput, setCustomInput] = useState('')
-  const [showCustom, setShowCustom] = useState(false)
+  const [answers, setAnswers] = useState<Record<string, string[]>>(initialAnswers)
+  const [multiSelectMode, setMultiSelectMode] = useState(false)
+  const longPressTimer = useRef<number | null>(null)
 
   const currentQuestion = QUESTIONS[currentIndex]
   const isLastQuestion = currentIndex === QUESTIONS.length - 1
   const currentAnswers = answers[currentQuestion.id] || []
 
-  const handleSelect = (option: string) => {
-    setAnswers(prev => {
-      const current = prev[currentQuestion.id] || []
-      if (current.includes(option)) {
-        return { ...prev, [currentQuestion.id]: current.filter(o => o !== option) }
-      }
-      return { ...prev, [currentQuestion.id]: [...current, option] }
-    })
-  }
-
-  const handleCustomSubmit = () => {
-    if (customInput.trim()) {
-      setAnswers(prev => ({
-        ...prev,
-        [currentQuestion.id]: [...(prev[currentQuestion.id] || []), customInput.trim()],
-      }))
-      setCustomInput('')
-      setShowCustom(false)
-    }
-  }
-
-  const handleNext = () => {
+  const goNext = () => {
     if (isLastQuestion) {
       onComplete(answers)
     } else {
       setCurrentIndex(prev => prev + 1)
-      setShowCustom(false)
-      setCustomInput('')
+      setMultiSelectMode(false)
+    }
+  }
+
+  const handleSelect = (option: string) => {
+    if (multiSelectMode) {
+      // 複数選択モード：トグル
+      setAnswers(prev => {
+        const current = prev[currentQuestion.id] || []
+        if (current.includes(option)) {
+          return { ...prev, [currentQuestion.id]: current.filter(o => o !== option) }
+        }
+        return { ...prev, [currentQuestion.id]: [...current, option] }
+      })
+    } else {
+      // 通常モード：選んで次へ
+      setAnswers(prev => ({
+        ...prev,
+        [currentQuestion.id]: [option],
+      }))
+      goNext()
+    }
+  }
+
+  const handleTouchStart = () => {
+    longPressTimer.current = window.setTimeout(() => {
+      setMultiSelectMode(true)
+    }, 500)
+  }
+
+  const handleTouchEnd = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current)
+      longPressTimer.current = null
     }
   }
 
   const handleBack = () => {
     if (currentIndex > 0) {
       setCurrentIndex(prev => prev - 1)
-      setShowCustom(false)
-      setCustomInput('')
-    }
-  }
-
-  const handleSkip = () => {
-    if (isLastQuestion) {
-      onComplete(answers)
-    } else {
-      setCurrentIndex(prev => prev + 1)
-      setShowCustom(false)
-      setCustomInput('')
+      setMultiSelectMode(false)
     }
   }
 
@@ -103,16 +104,29 @@ export function DreamQuestionnaire({ onComplete, onCancel }: DreamQuestionnaireP
     <div className={styles.container}>
       <div className={styles.progress}>
         {QUESTIONS.map((_, i) => (
-          <div
+          <span
             key={i}
-            className={`${styles.dot} ${i === currentIndex ? styles.active : ''} ${i < currentIndex ? styles.done : ''}`}
-          />
+            className={i === currentIndex ? styles.active : i < currentIndex ? styles.done : ''}
+          >
+            ·
+          </span>
         ))}
       </div>
 
       <h2 className={styles.question}>{currentQuestion.text}</h2>
 
-      <div className={styles.options}>
+      {multiSelectMode && (
+        <p className={styles.multiHint}>複数選択中（完了したらタップ）</p>
+      )}
+
+      <div
+        className={styles.options}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onMouseDown={handleTouchStart}
+        onMouseUp={handleTouchEnd}
+        onMouseLeave={handleTouchEnd}
+      >
         {currentQuestion.options.map(option => (
           <button
             key={option}
@@ -122,56 +136,20 @@ export function DreamQuestionnaire({ onComplete, onCancel }: DreamQuestionnaireP
             {option}
           </button>
         ))}
-        <button
-          className={`${styles.option} ${styles.other}`}
-          onClick={() => setShowCustom(true)}
-        >
-          その他...
-        </button>
       </div>
 
-      {showCustom && (
-        <div className={styles.customInput}>
-          <input
-            type="text"
-            value={customInput}
-            onChange={e => setCustomInput(e.target.value)}
-            placeholder="自由入力"
-            autoFocus
-            onKeyDown={e => e.key === 'Enter' && handleCustomSubmit()}
-          />
-          <button onClick={handleCustomSubmit}>追加</button>
-        </div>
-      )}
-
-      {currentAnswers.length > 0 && (
-        <div className={styles.selected_list}>
-          {currentAnswers.map(answer => (
-            <span key={answer} className={styles.tag}>
-              {answer}
-              <button onClick={() => handleSelect(answer)}>×</button>
-            </span>
-          ))}
-        </div>
-      )}
-
-      <div className={styles.actions}>
-        <button className={styles.cancel} onClick={onCancel}>
+      <div className={styles.footer}>
+        <button className={styles.textButton} onClick={onCancel}>
           やめる
         </button>
-        <div className={styles.nav}>
-          {currentIndex > 0 && (
-            <button className={styles.back} onClick={handleBack}>
-              戻る
-            </button>
-          )}
-          <button className={styles.skip} onClick={handleSkip}>
-            スキップ
+        {currentIndex > 0 && (
+          <button className={styles.textButton} onClick={handleBack}>
+            戻る
           </button>
-          <button className={styles.next} onClick={handleNext}>
-            {isLastQuestion ? '完了' : '次へ'}
-          </button>
-        </div>
+        )}
+        <button className={styles.textButton} onClick={goNext}>
+          {currentAnswers.length === 0 ? 'スキップ' : multiSelectMode ? '次へ' : ''}
+        </button>
       </div>
     </div>
   )

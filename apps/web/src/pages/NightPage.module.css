@@ -160,11 +160,12 @@
 }
 
 .hint {
-  position: relative;
+  position: fixed;
+  bottom: var(--spacing-lg);
+  left: var(--spacing-lg);
   z-index: 1;
   color: var(--color-text-muted);
   font-size: var(--font-size-small);
-  margin-top: var(--spacing-xl);
   opacity: 0.5;
 }
 

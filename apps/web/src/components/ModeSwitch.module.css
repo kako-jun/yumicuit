@@ -3,10 +3,7 @@
   bottom: var(--spacing-lg);
   right: var(--spacing-lg);
   display: flex;
-  gap: 2px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 6px;
-  padding: 2px;
+  gap: 8px;
 }
 
 .button {
@@ -15,17 +12,17 @@
   color: var(--color-text-muted);
   font-size: var(--font-size-small);
   font-family: var(--font-family);
-  padding: 4px 10px;
-  border-radius: 4px;
+  padding: 4px 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+  opacity: 0.3;
 }
 
 .button:hover {
-  color: var(--color-text-primary);
+  opacity: 0.6;
 }
 
 .button.active {
-  background: rgba(255, 255, 255, 0.1);
+  opacity: 1;
   color: var(--color-text-primary);
 }
