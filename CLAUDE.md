@@ -19,6 +19,7 @@
 | [docs/roadmap.md](docs/roadmap.md) | 開発フェーズ、タスク一覧 |
 | [docs/capacitor.md](docs/capacitor.md) | Capacitorとは、iOSビルド事情 |
 | [docs/vision.md](docs/vision.md) | 最終ビジョン：夢の景色を持ち帰る |
+| [docs/i18n.md](docs/i18n.md) | 多言語対応（日本語・英語） |
 
 ## クイックサマリー
 
@@ -51,6 +52,12 @@
 
 - 生成した「夢の景色」画像のSNS共有
 - 修行 → Dream Camera → 共有 という新しい文化を作る
+
+## 基本情報
+
+- **ドメイン**: yumicuit.llll-ll.com
+- **多言語**: 最初から英語対応（i18n辞書形式）
+- **フォント**: 覚醒させない、刺激のないもの（昼も統一）
 
 ## 開発コマンド
 
