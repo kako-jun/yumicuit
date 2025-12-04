@@ -1,8 +1,9 @@
 import type { DreamRecord } from '../types/dream'
 
 const DB_NAME = 'yumicuit'
-const DB_VERSION = 1
+const DB_VERSION = 2
 const STORE_NAME = 'dreams'
+const STOCK_STORE_NAME = 'dreamStock'
 
 let dbInstance: IDBDatabase | null = null
 
@@ -27,6 +28,10 @@ function openDB(): Promise<IDBDatabase> {
       if (!db.objectStoreNames.contains(STORE_NAME)) {
         const store = db.createObjectStore(STORE_NAME, { keyPath: 'id' })
         store.createIndex('createdAt', 'createdAt', { unique: false })
+      }
+
+      if (!db.objectStoreNames.contains(STOCK_STORE_NAME)) {
+        db.createObjectStore(STOCK_STORE_NAME, { keyPath: 'id' })
       }
     }
   })
@@ -79,6 +84,59 @@ export async function getAllDreams(): Promise<DreamRecord[]> {
         resolve(results)
       }
     }
+  })
+}
+
+// Dream Stock (また見たい夢)
+export async function addToStock(dream: DreamRecord): Promise<void> {
+  const db = await openDB()
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STOCK_STORE_NAME, 'readwrite')
+    const store = transaction.objectStore(STOCK_STORE_NAME)
+    const request = store.put(dream)
+
+    request.onerror = () => reject(request.error)
+    request.onsuccess = () => resolve()
+  })
+}
+
+export async function removeFromStock(id: string): Promise<void> {
+  const db = await openDB()
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STOCK_STORE_NAME, 'readwrite')
+    const store = transaction.objectStore(STOCK_STORE_NAME)
+    const request = store.delete(id)
+
+    request.onerror = () => reject(request.error)
+    request.onsuccess = () => resolve()
+  })
+}
+
+export async function getStockedDreams(): Promise<DreamRecord[]> {
+  const db = await openDB()
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STOCK_STORE_NAME, 'readonly')
+    const store = transaction.objectStore(STOCK_STORE_NAME)
+    const request = store.getAll()
+
+    request.onerror = () => reject(request.error)
+    request.onsuccess = () => resolve(request.result)
+  })
+}
+
+export async function isInStock(id: string): Promise<boolean> {
+  const db = await openDB()
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STOCK_STORE_NAME, 'readonly')
+    const store = transaction.objectStore(STOCK_STORE_NAME)
+    const request = store.get(id)
+
+    request.onerror = () => reject(request.error)
+    request.onsuccess = () => resolve(!!request.result)
   })
 }
 

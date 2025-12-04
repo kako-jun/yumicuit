@@ -1,3 +1,5 @@
+import { DreamList } from '../components/DreamList'
+import { Settings } from '../components/Settings'
 import styles from './DaytimePage.module.css'
 
 export function DaytimePage() {
@@ -8,6 +10,11 @@ export function DaytimePage() {
         <p className={styles.description}>
           夢を記録し、AIと対話し、次の夢をデザインする
         </p>
+      </section>
+
+      <section className={styles.section}>
+        <h2 className={styles.sectionTitle}>過去の夢</h2>
+        <DreamList />
       </section>
 
       <section className={styles.section}>
@@ -29,13 +36,8 @@ export function DaytimePage() {
       </section>
 
       <section className={styles.section}>
-        <h2 className={styles.sectionTitle}>過去の夢</h2>
-        <p className={styles.placeholder}>（準備中）</p>
-      </section>
-
-      <section className={styles.section}>
         <h2 className={styles.sectionTitle}>設定</h2>
-        <p className={styles.placeholder}>（準備中）</p>
+        <Settings />
       </section>
     </div>
   )
