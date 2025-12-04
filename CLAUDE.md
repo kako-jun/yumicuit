@@ -33,7 +33,8 @@
 
 - React + Vite + Capacitor（PWA + 将来ネイティブ）
 - IndexedDB（ローカル完結）
-- WebLLM / wllama（ローカルLLM、従量課金なし）
+- LLM: ローカル（WebLLM/wllama）またはオンライン（ユーザーの既存アカウント）
+- yumicuitの役割: プロンプト代筆 + API呼び出し代行
 
 ### 最終ビジョン：Dream Camera
 
