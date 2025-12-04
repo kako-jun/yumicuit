@@ -1,0 +1,18 @@
+.input {
+  width: 100%;
+  min-height: 100%;
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--font-size-input);
+  line-height: var(--line-height-relaxed);
+  border: none;
+  outline: none;
+  resize: none;
+  padding: var(--spacing-lg);
+  caret-color: var(--color-text-primary);
+}
+
+.input::placeholder {
+  color: transparent;
+}

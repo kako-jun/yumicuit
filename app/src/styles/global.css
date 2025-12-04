@@ -1,0 +1,46 @@
+@import './tokens.css';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-normal);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent text selection highlight from being too bright */
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-text-primary);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
